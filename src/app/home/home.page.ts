@@ -8,15 +8,24 @@ import { SwapiService } from '../swapi.service';
 })
 export class HomePage implements OnInit {
 
+  planets: {
+    name: string;
+  }[] = [];
+
   constructor(
     private swapiSvc: SwapiService
   ) {}
 
-
   ngOnInit() {
     this.swapiSvc.loadPlanets().subscribe(
       data => {
-        console.log(data);
+        this.planets = [
+          ...this.planets,
+          ...data.results
+        ].sort(
+          (a,b) => a.name.localeCompare(b.name)
+        );
+        console.log(this.planets);
       },
       err => console.error(err)
     );
